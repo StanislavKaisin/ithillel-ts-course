@@ -24,35 +24,35 @@ class Student {
     this._birthYear = birthYear;
   }
 
-  get getStudentFirstName(): string {
+  get firstName(): string {
     return this._firstName;
   }
 
-  get getStudentLastName(): string {
+  get lastName(): string {
     return this._lastName;
   }
 
-  get getStudentBirthYear(): number {
+  get birthYear(): number {
     return this._birthYear;
   }
 
-  get getStudentFullName(): string {
+  get fullName(): string {
     return `${this._lastName} ${this._firstName}`;
   }
 
-  set setStudentFullName(value: string) {
+  set fullName(value: string) {
     [this._lastName, this._firstName] = value.split(" ");
   }
 
-  get getStudentAge(): number {
+  get age(): number {
     return new Date().getFullYear() - this._birthYear;
   }
 
-  set setStudentGrade(value: GradesType) {
+  setGrade(value: GradesType): void {
     this._grades = { ...this._grades, ...value };
   }
 
-  set setStudentVisits(value: VisitsType[]) {
+  setVisits(value: VisitsType[]): void {
     this._visits = [...this._visits, ...value];
   }
 
@@ -97,7 +97,27 @@ class Group<A> {
     this._id = id;
   }
 
-  showPerformance() {
+  get id(): string {
+    return this._id;
+  }
+
+  get area(): A | undefined {
+    return this._area;
+  }
+
+  get status(): Statuses | undefined {
+    return this._status;
+  }
+
+  get students(): S[] {
+    return this._students;
+  }
+
+  setStatus(value: Statuses): void {
+    this._status = value;
+  }
+
+  showPerformance(): Student[] {
     const sortedStudents = this._students.sort(
       (a, b) =>
         b.getStudentPerformanceRating() - a.getStudentPerformanceRating()
@@ -105,37 +125,15 @@ class Group<A> {
     return sortedStudents;
   }
 
-  set addStudent(value: S) {
+  addStudent(value: S): void {
     this._students = [...this._students, value];
   }
 
-  set removeStudent(value: S) {
+  removeStudent(value: S): void {
     this._students = this._students.filter(
       (student) =>
-        student.getStudentAge !== value.getStudentAge &&
-        student.getStudentFullName !== value.getStudentFullName &&
-        student.getStudentAge != student.getStudentAge
+        student.age !== value.age && student.fullName !== value.fullName
     );
-  }
-
-  get getGroupId(): string {
-    return this._id;
-  }
-
-  get getGroupArea(): A | undefined {
-    return this._area;
-  }
-
-  set setGroupArea(value: A) {
-    this._area = value;
-  }
-
-  get getGroupStatus(): Statuses | undefined {
-    return this._status;
-  }
-
-  set setGroupStatus(value: Statuses) {
-    this._status = value;
   }
 }
 
@@ -149,24 +147,22 @@ class Level<G extends Group<any>> {
     this._description = description;
   }
 
-  get getLevelName(): string {
+  get name(): string {
     return this._name;
   }
-  get getLevelDescription(): string {
+  get description(): string {
     return this._description;
   }
 
-  get getLevelGroups(): G[] {
+  get groups(): G[] {
     return this._groups;
   }
 
-  set addGroupToLevel(value: G) {
+  addGroup(value: G): void {
     this._groups.push(value);
   }
-  set removeGroupFromLevel(value: G) {
-    this._groups = this._groups.filter(
-      (group: G) => group.getGroupId !== value.getGroupId
-    );
+  removeGroup(value: G): void {
+    this._groups = this._groups.filter((group: G) => group.id !== value.id);
   }
 }
 
@@ -178,21 +174,21 @@ class Area<L extends Level<any>> {
     this._name = name;
   }
 
-  get getAreaLevels(): L[] {
+  get levels(): L[] {
     return this._levels;
   }
 
-  get getAreaName(): string {
+  get name(): string {
     return this._name;
   }
 
-  set addLevelToArea(level: L) {
+  addLevel(level: L): void {
     this._levels.push(level);
   }
 
-  set removeLevelFromArea(level: L) {
+  removeLevel(level: L): void {
     this._levels = this._levels.filter((lvl) => {
-      return lvl.getLevelName !== level.getLevelName;
+      return lvl.name !== level.name;
     });
   }
 }
@@ -219,28 +215,28 @@ class School<A extends Area<any>> {
   private _areas: A[] = [];
   private _lecturers: Lecturer[] = [];
 
-  get areas() {
+  get areas(): A[] {
     return this._areas;
   }
 
-  get lecturers() {
+  get lecturers(): Lecturer[] {
     return this._lecturers;
   }
 
-  set addAreaToSchool(value: A) {
+  addArea(value: A): void {
     this._areas.push(value);
   }
-  set removeAreaFromSchool(value: A) {
+  removeArea(value: A): void {
     this._areas = this._areas.filter((area) => {
-      return area.getAreaName !== value.getAreaName;
+      return area.name !== value.name;
     });
   }
 
-  set addLecturerToSchool(value: Lecturer) {
+  addLecturer(value: Lecturer): void {
     this._lecturers.push(value);
   }
 
-  set removeLecturerFromSchool(value: Lecturer) {
+  removeLecturer(value: Lecturer): void {
     this._lecturers = this._lecturers.filter((lecturer) => {
       return lecturer.name !== value.name && lecturer.surname !== value.surname;
     });
